@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Servicenetwork 公式旗艦店</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: 深夜の怪しい越境通販。過剰で親切すぎる売り文句、少し壊れた日本語。
+IDEA: 中華系通販アプリの商品ページ。DJの作品とSNSを「商品」と「店舗フォロー」として陳列する。
+PICTURE: ロゴのオレンジの箱を巨大化し、ステッカーが貼られまくった商品画像。
+COLOUR and TYPE: ロゴのオレンジ #ff4e02 / 激安イエロー #ffe100 / 白。Noto Sans JP 900 と DotGothic16。
+LAYOUT: 流れるティッカー→ヘッダー→商品画像＋購入欄→セール作品棚→店舗フォロー（SNS）→フッター。
+*/
+:root{color-scheme:light dark;
+--bg:light-dark(#fff4f0,#1a0606);
+--card:light-dark(#ffffff,#2a0c0c);
+--ink:light-dark(#1b0c0c,#fff1ec);
+--mute:light-dark(#7a5a55,#c9a39b);
+--red:#ff4e02;--red2:light-dark(#d63d00,#ff7a3d);
+--yel:#ffe100;--line:light-dark(#f2d3cc,#4a1a1a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans JP",system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(4vw,16px)}
+.band{padding:clamp(28px,4vw,56px) 0}
+.dot{font-family:"DotGothic16",monospace}
+
+/* ticker */
+.tick{background:var(--yel);color:#1b0c0c;overflow:hidden;white-space:nowrap;font-weight:900;font-size:14px;border-bottom:2px solid #1b0c0c}
+.tick div{display:inline-block;padding:7px 0;animation:run 38s linear infinite}
+.tick span{margin-right:40px}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* header */
+header{background:var(--red);color:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 0 #9a2e00}
+.hd{display:flex;align-items:center;gap:16px;padding-block:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
+.logo .mk{width:40px;height:40px;background:#fff;border-radius:10px;display:grid;place-items:center;flex:none}.logo .mk svg{width:34px;height:34px}
+.logo b{background:var(--yel);color:var(--red);border-radius:8px;padding:2px 8px;font-size:15px}
+.search{flex:1 1 260px;display:flex;background:#fff;border-radius:999px;overflow:hidden;border:2px solid var(--yel)}
+.search input{flex:1;border:0;padding:10px 16px;font:16px "Noto Sans JP",sans-serif;color:#1b0c0c;background:#fff;outline:none}
+.search button{border:0;background:var(--yel);color:#1b0c0c;font-weight:900;padding:0 18px;font-size:15px;cursor:pointer;min-height:44px}
+.search:focus-within{box-shadow:0 0 0 3px #fff}
+nav.top{display:flex;gap:4px;flex-wrap:wrap}
+nav.top a{text-decoration:none;font-weight:700;font-size:14px;padding:10px 12px;border-radius:8px}
+nav.top a:hover,nav.top a:focus-visible{background:#ffffff26;outline:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:stretch}
+.shot{position:relative;background:linear-gradient(160deg,#fff 0%,#ffe9e3 100%);border-radius:18px;border:2px solid var(--line);overflow:hidden;min-height:440px}
+:root[data-theme=dark] .shot{background:linear-gradient(160deg,#3a1010,#200707)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .shot{background:linear-gradient(160deg,#3a1010,#200707)}}
+.shot svg{position:absolute;inset:0;width:100%;height:100%}
+.badge{position:absolute;left:14px;top:14px;background:var(--red);color:#fff;font-weight:900;padding:6px 12px;border-radius:6px;font-size:14px;transform:rotate(-4deg)}
+.thumbs{position:absolute;left:14px;bottom:14px;display:flex;gap:8px}
+.thumbs button{width:52px;height:52px;border-radius:8px;border:2px solid var(--line);background:var(--card);font:900 12px "Noto Sans JP",sans-serif;color:var(--red2);cursor:pointer}
+.thumbs button[aria-pressed=true]{border-color:var(--red)}
+
+.buy{display:flex;flex-direction:column;gap:14px}
+.shop{font-size:13px;color:var(--mute);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.shop i{font-style:normal;background:var(--red);color:#fff;border-radius:4px;padding:1px 6px;font-weight:700}
+h1{font-size:clamp(26px,3.2vw,38px);line-height:1.08;margin:0;font-weight:900;text-wrap:balance}
+.sub{color:var(--mute);margin:0}
+.price{background:linear-gradient(90deg,var(--red),#ff4d1a);color:#fff;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.price .now{font-size:clamp(36px,5vw,52px);font-weight:900;line-height:1;white-space:nowrap}
+.price .now small{font-size:20px}
+.price s{opacity:.8;white-space:nowrap}
+.price .off{background:var(--yel);color:#1b0c0c;font-weight:900;border-radius:6px;padding:4px 8px;white-space:nowrap}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar div{height:100%;width:97%;background:linear-gradient(90deg,var(--yel),var(--red))}
+.meta{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:6px 12px;font-size:15px;margin:0}
+.meta dt{color:var(--mute)}.meta dd{margin:0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{min-height:44px;padding:8px 14px;border-radius:8px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:700 15px "Noto Sans JP",sans-serif;cursor:pointer}
+.opts button[aria-pressed=true]{border-color:var(--red);color:var(--red2)}
+.cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:999px;font-weight:900;font-size:17px;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+.btn.y{background:var(--yel);color:#1b0c0c}.btn.r{background:var(--red);color:#fff}
+.btn:focus-visible,.opts button:focus-visible,.sns a:focus-visible,.card:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+.note{font-size:13px;color:var(--mute);margin:0}
+
+/* section heads */
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h2{font-size:clamp(24px,3vw,32px);margin:0;font-weight:900;line-height:1.1}
+h2 em{font-style:normal;background:var(--red);color:#fff;padding:0 8px;border-radius:6px;margin-right:8px}
+.sh p{margin:0;color:var(--mute);font-size:14px}
+
+/* product grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:14px}
+.card{background:var(--card);border-radius:14px;border:2px solid var(--line);overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.card .img{aspect-ratio:1;display:grid;place-items:center;position:relative;overflow:hidden}
+.card .img svg{width:100%;height:100%}
+.card .tag{position:absolute;top:8px;left:8px;background:var(--yel);color:#1b0c0c;font-weight:900;font-size:12px;padding:2px 7px;border-radius:4px}
+.card .body{padding:10px 12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-size:15px;margin:0;line-height:1.35;font-weight:700}
+.card .p{color:var(--red2);font-weight:900;font-size:20px;white-space:nowrap}
+.card .p small{font-size:13px}
+.card .s{font-size:13px;color:var(--mute)}
+
+/* sns stores */
+.stores{background:var(--red);color:#fff}
+.stores h2 em{background:var(--yel);color:#1b0c0c}
+.stores .sh p{color:#fff0e6}
+.sns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.sns a{background:#fff;color:#1b0c0c;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;text-decoration:none;border:3px solid #1b0c0c;box-shadow:5px 5px 0 #9a2e00;transition:transform .12s,box-shadow .12s}
+.sns a:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #9a2e00}
+.sns .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.sns .ic svg{width:26px;height:26px}
+.sns strong{font-size:19px;font-weight:900}
+.sns span{font-size:14px;color:#6a4a45}
+.sns .f{margin-top:auto;background:var(--red);color:#fff;border-radius:999px;text-align:center;font-weight:900;padding:10px;font-size:15px}
+
+/* faq / notes */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.faq details{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:4px 16px}
+.faq summary{cursor:pointer;font-weight:700;padding:12px 0;min-height:44px}
+.faq p{margin:0 0 14px;color:var(--mute)}
+
+footer{background:#1b0c0c;color:#e8cfca;font-size:13px}
+footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer b{color:var(--yel)}
+
+@media(max-width:900px){.sns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.shot{min-height:340px}nav.top{display:none}.faq{grid-template-columns:1fr}}
+@media(max-width:420px){.sns{grid-template-columns:1fr}.cta{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.tick div{animation:none}.card,.sns a{transition:none}#box{animation:none!important}}
+
+/* temu-ish extras */
+.cartbtn{position:relative;width:48px;height:44px;border:0;border-radius:10px;background:#ffffff26;color:#fff;cursor:pointer;display:grid;place-items:center}
+.cartbtn svg{width:26px;height:26px}
+.cartbtn span{position:absolute;top:-4px;right:-4px;background:var(--yel);color:#1b0c0c;font-weight:900;font-size:12px;min-width:20px;height:20px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
+.cartbtn.pop span{animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.5)}}
+.cartbtn:focus-visible,.fab:focus-visible,.x:focus-visible,.thumbs button:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+.live{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--mute)}
+.live b{color:var(--red2)}
+.pulse{width:10px;height:10px;border-radius:50%;background:#19c24a;box-shadow:0 0 0 0 #19c24a88;animation:pl 1.6s infinite}
+@keyframes pl{to{box-shadow:0 0 0 10px #19c24a00}}
+.coupons{display:flex;gap:8px;flex-wrap:wrap}
+.cp{border:2px dashed var(--red);color:var(--red2);border-radius:8px;padding:4px 10px;font-weight:900;font-size:13px;background:var(--card)}
+.feed .card .p{font-size:18px}
+.feed .sold{font-size:12px;color:var(--mute)}
+.more{text-align:center;color:var(--mute);padding:20px 0;font-weight:700}
+.fab{position:fixed;right:16px;bottom:16px;z-index:8;width:64px;height:64px;border-radius:50%;border:3px solid #1b0c0c;background:var(--yel);color:#1b0c0c;font:900 12px/1.15 "Noto Sans JP",sans-serif;cursor:pointer;box-shadow:3px 3px 0 #1b0c0c;animation:wob 3s ease-in-out infinite}
+@keyframes wob{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(12deg)}95%{transform:rotate(-6deg)}}
+.toast{position:fixed;left:16px;bottom:16px;z-index:8;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;gap:10px;align-items:center;max-width:min(340px,calc(100vw - 110px));box-shadow:0 8px 24px #0003;font-size:14px;transform:translateY(140%);transition:transform .35s}
+.toast.on{transform:none}
+.toast svg{width:34px;height:34px;flex:none}
+.ov{position:fixed;inset:0;z-index:20;background:#000a;display:none;align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}
+.modal{max-height:calc(100vh - 32px);overflow:auto;background:var(--card);color:var(--ink);border-radius:20px;padding:22px;width:min(400px,100%);text-align:center;position:relative;border:3px solid var(--red)}
+.modal h3{margin:0 0 4px;font-size:24px;font-weight:900}
+.modal p{margin:0 0 12px;color:var(--mute);font-size:14px}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;color:var(--ink);font-size:24px;cursor:pointer;border-radius:8px}
+.wheel{position:relative;width:min(300px,72vw);aspect-ratio:1;margin:8px auto 14px}
+.wheel svg{width:100%;height:100%;transition:transform 4s cubic-bezier(.15,.8,.2,1)}
+.wheel:after{content:"";position:absolute;left:50%;top:-6px;transform:translateX(-50%);border:14px solid transparent;border-top:22px solid #1b0c0c}
+.jack{background:linear-gradient(135deg,#1b0c0c,#4a1a00);color:#ffd84a;border:3px solid #ffd84a;border-radius:14px;padding:14px;margin-bottom:12px;display:grid;gap:8px;animation:glow 1s ease-in-out infinite alternate}
+.jack[hidden]{display:none}
+.jack strong{font-size:19px;font-weight:900}
+.jack span{color:#fff;font-size:14px}
+@keyframes glow{to{box-shadow:0 0 24px #ffd84a}}
+.odds{font-size:12px!important;margin:10px 0 0!important}
+.cf{position:fixed;top:-20px;width:10px;height:14px;z-index:30;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.prize{min-height:1.6em;font-weight:900;color:var(--red2);font-size:18px;margin-bottom:10px}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:21;width:min(380px,100%);background:var(--card);color:var(--ink);transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:-10px 0 30px #0004}
+.drawer.on{transform:none}
+.drawer header{position:static;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:18px}
+.drawer header .x{position:static;color:#fff}
+.ship{padding:14px 18px;border-bottom:2px solid var(--line);font-size:14px}
+.ship .bar{margin-top:8px}
+.ship .bar div{transition:width .4s}
+.lines{flex:1;overflow:auto;padding:8px 18px;list-style:none;margin:0}
+.lines li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.lines li svg{width:44px;height:44px;flex:none}
+.lines li span{flex:1}
+.lines li button{min-height:36px;border:2px solid var(--line);background:none;color:var(--ink);border-radius:8px;cursor:pointer;font:700 13px "Noto Sans JP",sans-serif}
+.empty{color:var(--mute);text-align:center;padding:40px 0}
+.dfoot{padding:14px 18px;border-top:2px solid var(--line);display:grid;gap:8px}
+@media(prefers-reduced-motion:reduce){.fab,.pulse{animation:none}.wheel svg,.toast,.drawer{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="tick" aria-hidden="true"><div class="dot" id="tick"></div></div>
+
+<header>
+  <div class="wrap hd">
+    <a class="logo" href="#top"><span class="mk"><svg viewBox="70 105 260 200" aria-hidden="true"><use href="#cube"/></svg></span>Servicenetwork <b>公式旗艦店</b></a>
+    <form class="search" id="sf" role="search">
+      <input id="q" type="search" placeholder="良い音楽 安い 返品ない" aria-label="店内検索">
+      <button type="submit">検索</button>
+    </form>
+    <nav class="top">
+      <a href="#items">爆売商品</a>
+      <a href="#stores">店舗フォロー</a>
+      <a href="#faq">よくある質問</a>
+    </nav>
+    <button class="cartbtn" type="button" id="cartOpen" aria-label="カートを開く"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 4h2l2.4 11h11l2-8H6.3"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg><span id="cnt">0</span></button>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><polygon id="cube" points="82,163 178,119 319,144 319,236 220,293 82,250" fill="#ff4e02"/></defs></svg>
+<main id="top">
+  <section class="band">
+    <div class="wrap hero">
+      <div class="shot">
+        <svg viewBox="0 0 600 520" role="img" aria-label="オレンジ色の箱（商品写真）">
+          <defs>
+            <linearGradient id="tp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a5c"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient>
+            <linearGradient id="fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a12"/><stop offset="1" stop-color="#f04800"/></linearGradient>
+            <linearGradient id="sd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d84000"/><stop offset="1" stop-color="#b33400"/></linearGradient>
+            <radialGradient id="flr" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+          </defs>
+          <ellipse cx="300" cy="420" rx="230" ry="34" fill="url(#flr)"/>
+          <g id="box" style="transform-origin:300px 300px;animation:bob 4s ease-in-out infinite">
+            <g id="view" transform="translate(-52 -38) scale(1.6)">
+              <polygon points="82,163 178,119 319,144 220,190" fill="url(#tp)"/>
+              <polygon points="82,163 220,190 220,293 82,250" fill="url(#fr)"/>
+              <polygon points="220,190 319,144 319,236 220,293" fill="url(#sd)"/>
+              <polyline points="82,163 220,190 319,144" fill="none" stroke="#ffc49c" stroke-width="1.2" opacity=".8"/>
+              <line x1="220" y1="190" x2="220" y2="293" stroke="#ff9a5c" stroke-width="1" opacity=".6"/>
+            </g>
+          </g>
+        </svg>
+        <div class="badge">今日だけ とても売れてます</div>
+        <div class="thumbs" id="thumbs"><button type="button" aria-pressed="true" data-v="0">正面</button><button type="button" aria-pressed="false" data-v="1">裏側</button><button type="button" aria-pressed="false" data-v="2">近い</button></div>
+      </div>
+
+      <div class="buy">
+        <div class="shop"><i>公式</i>Servicenetwork 公式旗艦店 ・ 発送元：謎の倉庫 ・ 好評率 99.9%（たぶん）</div>
+        <h1>【新作】サービスネットワーク 在庫処分BOX（返品不可）全60曲 大容量 高音質 送料無料 即納</h1>
+        <p class="sub">とても良い音楽です。60曲が1つの箱に入っている、とても大容量。倉庫の奥から出てきた音、あなたのために安くします。安心してください、返品はできません。</p>
+        <div class="price">
+          <span class="now">¥???<small> 近日入荷</small></span>
+          <s>参考価格 ¥99,999</s>
+          <span class="off">-99% OFF</span>
+        </div>
+        <div class="coupons"><span class="cp">新規 ¥0 OFF</span><span class="cp">2個目 0% OFF</span><span class="cp">返品不可券</span></div>
+        <div class="live"><span class="pulse"></span><b id="watch">128</b>人がいま見ています ・ <b id="incart">37</b>人がカートに入れました</div>
+        <div>
+          <div class="bar"><div></div></div>
+          <p class="note" style="margin-top:6px">在庫が少ないです！急いでください！（いつも少ないです）</p>
+        </div>
+        <dl class="meta">
+          <dt>入荷</dt><dd>近日。お待ちください、とても待ってください</dd>
+          <dt>収録</dt><dd>60曲 / 1枚（たくさんです）</dd>
+          <dt>前作</dt><dd>サービスネットワーク 涼しいセール</dd>
+          <dt>保証</dt><dd>ありません。返品ない</dd>
+        </dl>
+        <div>
+          <p class="note" style="margin-bottom:6px">カラー・規格を選択</p>
+          <div class="opts" id="opts">
+            <button type="button" aria-pressed="true">段ボール色</button>
+            <button type="button" aria-pressed="false">もっと段ボール色</button>
+            <button type="button" aria-pressed="false">オレンジ色の箱</button>
+          </div>
+        </div>
+        <div class="cta">
+          <button class="btn y" type="button" id="spinOpen">ルーレットを回す</button>
+          <button class="btn r" type="button" id="cart">カートに入れる</button>
+        </div>
+        <p class="note" id="msg" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="items" style="padding-top:0">
+    <div class="wrap">
+      <div class="sh">
+        <h2><em>爆売</em>この店の良い商品です</h2>
+        <p>※ 値段はうそです。ごめんなさい</p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="band stores" id="stores">
+    <div class="wrap">
+      <div class="sh">
+        <h2><em>関注</em>フォローしてください、クーポンもらえます</h2>
+        <p>クーポンはもらえません。新しい曲とDJの情報をもらえます。</p>
+      </div>
+      <div class="sns" id="sns"></div>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap">
+      <div class="sh"><h2><em>Q&amp;A</em>よくある質問</h2></div>
+      <div class="faq">
+        <details><summary>Servicenetworkは何ですか？</summary><p>DJです。トラックメイカーの別の名前です。怪しい通販のような音、たくさん売っています（売っていません）。</p></details>
+        <details><summary>本当に返品できないですか？</summary><p>はい。音楽は返品できません。気に入らないなら、もう一回聴いてください。2回目はもっと良いです。</p></details>
+        <details><summary>DJを呼びたいです、どこですか？</summary><p>X か Instagram のDM、または Discord に来てください。すぐ返事します（すぐではないです）。</p></details>
+        <details><summary>いつ届きますか？</summary><p>もうすぐです。お知らせはSNSでします。フォローして待ってください。</p></details>
+      </div>
+    </div>
+  </section>
+  <section class="band feed" id="feed" style="padding-top:0">
+    <div class="wrap">
+      <div class="sh"><h2><em>推荐</em>あなたにおすすめです</h2><p>下に行くと、もっと出てきます</p></div>
+      <div class="grid" id="fgrid"></div>
+      <div class="more" id="more">読み込んでいます…</div>
+    </div>
+  </section>
+</main>
+
+<button class="fab" type="button" id="fab">0円<br>もらう</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="ov" id="spin" role="dialog" aria-modal="true" aria-labelledby="spinT">
+  <div class="modal">
+    <button class="x" type="button" data-close aria-label="閉じる">×</button>
+    <h3 id="spinT">おめでとうございます！</h3>
+    <p>あなたは選ばれました。1回だけ無料で回せます（何回でも回せます）</p>
+    <div class="wheel"><svg viewBox="-100 -100 200 200" id="wsvg"></svg></div>
+    <div class="prize" id="prize" aria-live="polite"></div>
+    <div class="jack" id="jack" hidden>
+      <strong>サービスネットワーク 涼しいセール</strong>
+      <span>アルバムの音源を全部あげます。本当です。おめでとうございます！</span>
+      <a class="btn y" id="jackLink" href="#" target="_blank" rel="noopener">音源をもらう</a>
+    </div>
+    <p class="odds">大当たりの確率は 1/1000 です</p>
+    <button class="btn r" type="button" id="spinGo" style="width:100%">回す</button>
+  </div>
+</div>
+
+<div class="ov" id="dim" data-close></div>
+<aside class="drawer" id="drawer" aria-label="カート">
+  <header><span>カート</span><button class="x" type="button" data-close aria-label="閉じる">×</button></header>
+  <div class="ship" id="ship"></div>
+  <ul class="lines" id="lines"></ul>
+  <div class="dfoot">
+    <div class="coupons" id="mycp"></div>
+    <button class="btn r" type="button" id="checkout">レジに進む</button>
+    <button class="btn y" type="button" id="invite">友達を招待して0円にする</button>
+    <p class="note" id="dmsg" aria-live="polite"></p>
+  </div>
+</aside>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 <b>Servicenetwork</b> 公式旗艦店 ／ 本サイトは架空の通販サイトです。実際の販売・決済は行っていません。</span>
+    <span class="dot">お買い上げありがとうございました ★ また来てね ★ 謝謝惠顧</span>
+  </div>
+</footer>
+
+<script>
+{
+  // ▼ リンクはここを書き換えるだけでOK
+  const LINKS = {
+    instagram: "https://www.instagram.com/sbnwchina_official",
+    x: "https://x.com/servicenet11",
+    soundcloud: "https://soundcloud.com/",
+    discord: "https://discord.gg/kJeeUZhR7"
+  };
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  const tickItems = ["★ 新しい会員は全部0円クーポン（使えません）","◆ 在庫処分BOX まもなく入荷します","★ 前の作品「涼しいセール」とても人気です","◆ DJの情報はフォローしてください","★ 今日だけ 毎日やってます","◆ とても高音質 とても大容量 返品ない"];
+  const t = tickItems.map(x => `<span>${esc(x)}</span>`).join("");
+  document.getElementById("tick").innerHTML = t + t;
+
+  const icons = {
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.8 3h6.4l4.4 5.9L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg>',
+    soundcloud: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7.5c.6-.3 1.3-.5 2-.5 2.7 0 4.9 2 5.2 4.6.3-.1.6-.1.9-.1 1.6 0 2.9 1.3 2.9 2.9S20.7 17.3 19.1 17.3H11V7.5zM9.5 9h1v8.3h-1zM7.5 10h1v7.3h-1zM5.5 11h1v6.3h-1zM3.5 12.5h1v4.8h-1zM1.5 13.5h1v3.5h-1z"/></svg>',
+    discord: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 5.3A17 17 0 0 0 15.3 4l-.5 1a15.7 15.7 0 0 0-5.6 0l-.5-1a17 17 0 0 0-4.2 1.3C1.8 9.4 1.1 13.4 1.4 17.3A17 17 0 0 0 6.6 20l1.1-1.8c-.6-.2-1.2-.5-1.7-.8l.4-.3a12.2 12.2 0 0 0 11.2 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.8a17 17 0 0 0 5.2-2.7c.4-4.5-.7-8.5-3.1-12zM8.7 14.9c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1zm6.6 0c-1 0-1.9-1-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1z"/></svg>'
+  };
+  const stores = [
+    {k:"instagram", name:"Instagram", d:"写真とフライヤー、とてもきれいです", c:"linear-gradient(135deg,#feda75,#d62976,#4f5bd5)", f:"関注する"},
+    {k:"x", name:"X", d:"DJの情報、お知らせ、ひとりごと", c:"#000", f:"フォローする"},
+    {k:"soundcloud", name:"SoundCloud", d:"新しい曲とミックス、無料で聴けます", c:"#ff5500", f:"試聴する"},
+    {k:"discord", name:"Discord", d:"サポート窓口です。雑談もOKです", c:"#5865f2", f:"入店する"}
+  ];
+  document.getElementById("sns").innerHTML = stores.map(s =>
+    `<a href="${esc(LINKS[s.k])}" target="_blank" rel="noopener">
+      <div class="ic" style="background:${s.c}">${icons[s.k]}</div>
+      <strong>${esc(s.name)}</strong><span>${esc(s.d)}</span>
+      <div class="f">${esc(s.f)}</div></a>`).join("");
+
+  const art = (bg, fg, label, sub) => `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <rect width="200" height="200" fill="${bg}"/>
+    <circle cx="150" cy="50" r="70" fill="${fg}" opacity=".18"/>
+    <rect x="30" y="58" width="140" height="94" rx="6" fill="#fff" opacity=".92"/>
+    <text x="100" y="104" text-anchor="middle" font-family="Noto Sans JP" font-weight="900" font-size="22" fill="${bg}">${label}</text>
+    <text x="100" y="130" text-anchor="middle" font-family="DotGothic16" font-size="12" fill="#1b0c0c">${sub}</text></svg>`;
+  const items = [
+    {n:"【新作】在庫処分BOX（返品不可）60曲入り", p:"¥???", u:" 近日入荷", s:"もうすぐ来ます", tag:"新作", a:art("#ff4e02","#ffe100","在庫処分","BOX / 60 TRACKS"), h:"#top"},
+    {n:"【好評】サービスネットワーク 涼しいセール", p:"¥???", u:"", s:"前の作品 ・ SoundCloudで聴けます", tag:"人気", a:art("#1aa3c9","#ffffff","涼しいセール","SERVICENETWORK"), h:"soundcloud"},
+    {n:"【出張】DJ 1セット あなたの現場まで行きます", p:"相談します", u:"", s:"DMしてください", tag:"DJ", a:art("#1b0c0c","#ffe100","DJ SET","SERVICE / NETWORK"), h:"x"},
+    {n:"【無料】お店のサポート Discord", p:"¥0", u:"", s:"入るのは無料、出るのも無料", tag:"0円", a:art("#5865f2","#ffffff","サポート","24H? OPEN"), h:"discord"}
+  ];
+  document.getElementById("grid").innerHTML = items.map(i => {
+    const href = i.h.startsWith("#") ? i.h : LINKS[i.h];
+    const ext = i.h.startsWith("#") ? "" : ' target="_blank" rel="noopener"';
+    return `<a class="card" href="${esc(href)}"${ext}>
+      <div class="img">${i.a}<span class="tag">${esc(i.tag)}</span></div>
+      <div class="body"><h3>${esc(i.n)}</h3>
+      <div class="p">${esc(i.p)}<small>${esc(i.u)}</small></div>
+      <div class="s">${esc(i.s)}</div></div></a>`;
+  }).join("");
+
+  const opts = document.getElementById("opts");
+  opts.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    opts.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  });
+
+  const msg = document.getElementById("msg");
+  document.getElementById("sf").addEventListener("submit", e => {
+    e.preventDefault();
+    const q = document.getElementById("q").value.trim();
+    msg.textContent = q ? `「${q}」を探しました。在庫処分BOXしかありません、ごめんなさい。` : "探さなくても在庫処分BOXしかありません。";
+    document.getElementById("top").scrollIntoView({behavior:"smooth"});
+  });
+  // ===== Temu-ish features =====
+  const $ = id => document.getElementById(id);
+  const boxMini = c => `<svg viewBox="70 105 260 200" aria-hidden="true"><polygon points="82,163 178,119 319,144 220,190" fill="${c[0]}"/><polygon points="82,163 220,190 220,293 82,250" fill="${c[1]}"/><polygon points="220,190 319,144 319,236 220,293" fill="${c[2]}"/></svg>`;
+  const ORANGE = ["#ff9a5c","#ff5a12","#c93a00"];
+
+  // product view thumbnails
+  const views = ["translate(-52 -38) scale(1.6)","translate(652 -38) scale(-1.6 1.6)","translate(-150 -120) scale(2.05)"];
+  $("thumbs").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    $("thumbs").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x===b));
+    $("view").setAttribute("transform", views[+b.dataset.v]);
+  });
+
+  // live counters
+  let watch = 128, inc = 37;
+  setInterval(() => {
+    watch = Math.max(40, watch + Math.round(Math.random()*14-6)); $("watch").textContent = watch;
+    if (Math.random() < .4) $("incart").textContent = ++inc;
+  }, 2500);
+
+  // cart
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem("sn_cart") || "[]"); } catch(e) {}
+  const coupons = new Set();
+  const FREE = 5;
+  const save = () => { try { localStorage.setItem("sn_cart", JSON.stringify(cart)); } catch(e) {} };
+  const renderCart = () => {
+    const n = cart.reduce((a,c) => a + c.q, 0);
+    $("cnt").textContent = n;
+    const left = Math.max(0, FREE - n);
+    $("ship").innerHTML = (left ? `あと<b>${left}個</b>で送料無料です！急いでください` : `<b>送料無料になりました！</b>（もともと無料です）`) +
+      `<div class="bar"><div style="width:${Math.min(100, n/FREE*100)}%"></div></div>`;
+    $("lines").innerHTML = cart.length ? cart.map((c,i) =>
+      `<li>${boxMini(c.col || ORANGE)}<span>${esc(c.name)}<br><small>× ${c.q}</small></span><button type="button" data-rm="${i}">消す</button></li>`).join("")
+      : `<li class="empty">カートは空っぽです。とても悲しいです</li>`;
+    $("mycp").innerHTML = [...coupons].map(c => `<span class="cp">${esc(c)}</span>`).join("");
+  };
+  const addCart = (name, col) => {
+    const f = cart.find(c => c.name === name);
+    f ? f.q++ : cart.push({name, q:1, col});
+    save(); renderCart();
+    const b = $("cartOpen"); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+    showToast(`カートに入れました！「${name}」`, ORANGE);
+  };
+  $("lines").addEventListener("click", e => {
+    const b = e.target.closest("[data-rm]"); if (!b) return;
+    cart.splice(+b.dataset.rm, 1); save(); renderCart();
+  });
+  $("cart").addEventListener("click", () => {
+    const sel = document.querySelector("#opts [aria-pressed=true]").textContent;
+    addCart(`在庫処分BOX（${sel}）`, ORANGE);
+    msg.textContent = "カートに入れました！入荷したらSNSで言います。";
+  });
+  const openDrawer = () => { renderCart(); $("drawer").classList.add("on"); $("dim").classList.add("on"); };
+  const closeAll = () => { $("drawer").classList.remove("on"); $("dim").classList.remove("on"); $("spin").classList.remove("on"); };
+  $("cartOpen").addEventListener("click", openDrawer);
+  document.addEventListener("click", e => { if (e.target.closest("[data-close]") || e.target.id === "spin") closeAll(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeAll(); });
+  const dmsgs = ["お支払いはできません。まだ売っていません。SNSをフォローして待ってください。","本当にできません。","できません（3回目）"];
+  let dc = 0;
+  $("checkout").addEventListener("click", () => { $("dmsg").textContent = dmsgs[Math.min(dc++, 2)]; });
+  $("invite").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(location.href.split("#")[0]); $("dmsg").textContent = "リンクをコピーしました！友達に送ってください。0円にはなりません。"; }
+    catch(e) { $("dmsg").textContent = "コピーできませんでした。このページのURLを友達に送ってください。"; }
+  });
+
+  // roulette
+  const prizes = ["大当たり","0円券","返品不可","もう1回","送料無料","-999円","はずれ","DJ 1曲","良い気分"];
+  const cols = ["#1b0c0c","#ff4e02","#ffe100","#e60012","#fff","#ff4e02","#ffe100","#e60012","#fff"];
+  const JACKPOT = "https://drive.google.com/drive/folders/1yRx9Joy5Yysdo2FpmyYgQlLfnz56fTE3?usp=sharing";
+  const seg = 360 / prizes.length;
+  $("wsvg").innerHTML = prizes.map((p,i) => {
+    const a0 = (i*seg-90-seg/2)*Math.PI/180, a1 = ((i+1)*seg-90-seg/2)*Math.PI/180;
+    const tc = i===0 ? "#ffd84a" : (cols[i]==="#fff"||cols[i]==="#ffe100") ? "#1b0c0c" : "#fff";
+    return `<path d="M0 0L${96*Math.cos(a0)} ${96*Math.sin(a0)}A96 96 0 0 1 ${96*Math.cos(a1)} ${96*Math.sin(a1)}Z" fill="${cols[i]}" stroke="#1b0c0c" stroke-width="1.5"/>
+      <text transform="rotate(${i*seg}) translate(0 -62)" text-anchor="middle" font-family="Noto Sans JP" font-weight="900" font-size="11" fill="${tc}">${esc(p)}</text>`;
+  }).join("") + `<circle r="16" fill="#1b0c0c"/><circle r="9" fill="#ff4e02"/>`;
+  let rot = 0, spinning = false;
+  $("spinGo").addEventListener("click", () => {
+    if (spinning) return; spinning = true; $("prize").textContent = "";
+    const win = Math.random() < 1/1000;
+    const k = win ? 0 : 1 + Math.floor(Math.random()*(prizes.length-1));
+    $("jack").hidden = true;
+    rot += 360*5 + (360 - (rot % 360)) - k*seg;
+    $("wsvg").style.transform = `rotate(${rot}deg)`;
+    setTimeout(() => {
+      spinning = false;
+      const p = prizes[k];
+      if (win) { $("prize").textContent = "！！！大当たり！！！ 1/1000 です"; $("jack").hidden = false; confetti(); $("spinGo").textContent = "もう1回回す"; return; }
+      $("prize").textContent = p === "はずれ" ? "はずれです。でもあなたは勝者です" : `「${p}」が当たりました！`;
+      if (p !== "はずれ" && p !== "もう1回") { coupons.add(p); renderCart(); }
+      $("spinGo").textContent = "もう1回回す";
+    }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 50 : 4100);
+  });
+  $("jackLink").href = JACKPOT;
+  const confetti = () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const cs = ["#ffd84a","#ff4e02","#e60012","#fff","#5865f2"];
+    for (let i = 0; i < 120; i++) {
+      const d = document.createElement("i"); d.className = "cf";
+      d.style.left = Math.random()*100 + "vw"; d.style.background = pick(cs);
+      d.style.animationDuration = (1.8 + Math.random()*2) + "s"; d.style.animationDelay = Math.random()*.6 + "s";
+      document.body.appendChild(d); setTimeout(() => d.remove(), 4500);
+    }
+  };
+  const openSpin = () => $("spin").classList.add("on");
+  $("spinOpen").addEventListener("click", openSpin);
+  $("fab").addEventListener("click", openSpin);
+  let auto = false;
+  try { auto = !sessionStorage.getItem("sn_spun"); sessionStorage.setItem("sn_spun","1"); } catch(e) {}
+  if (auto) setTimeout(openSpin, 2500);
+
+  // purchase toasts
+  const toast = $("toast"); let tt;
+  const showToast = (txt, c) => {
+    toast.innerHTML = boxMini(c) + `<span>${esc(txt)}</span>`;
+    toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("on"), 3800);
+  };
+  const prefs = ["東京都","大阪府","北海道","福岡県","愛知県","沖縄県","謎の倉庫","宇宙"];
+  const acts = ["在庫処分BOXをカートに入れました","「涼しいセール」を聴きました","Discordに入りました","Xをフォローしました","ルーレットで「返品不可券」が当たりました"];
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+  setInterval(() => { if (!$("drawer").classList.contains("on")) showToast(`${pick(prefs)}の誰かさんが${pick(acts)}`, ORANGE); }, 9000);
+
+  // infinite recommended feed
+  const names = ["ほぼ新品の低音","光るキック（電池なし）","大容量サンプルパック 0.5GB","ちょっと壊れたハイハット","とても涼しい環境音","業務用ノイズ 10kg","返品不可のビート","伝説のミックス（試聴のみ）","オレンジ色の無音","高級感のあるシンセ風","アップグレード版ドロップ","在庫処分の808"];
+  const pal = [["#ff9a5c","#ff5a12","#c93a00"],["#fff27a","#ffe100","#c9b000"],["#ff7a80","#e60012","#9a000c"],["#9ad8ff","#1aa3c9","#0b6f8a"],["#b0b6ff","#5865f2","#2f3aa8"]];
+  const links = ["soundcloud","x","instagram","discord"];
+  let page = 0;
+  const loadMore = () => {
+    if (page >= 6) { $("more").textContent = "これで全部です（うそです、在庫は無限です）"; io.disconnect(); return; }
+    page++;
+    $("fgrid").insertAdjacentHTML("beforeend", Array.from({length:8}, () => {
+      const n = pick(names), c = pick(pal), off = 50 + Math.floor(Math.random()*49), sold = Math.floor(Math.random()*90+1)/10;
+      return `<a class="card" href="${esc(LINKS[pick(links)])}" target="_blank" rel="noopener">
+        <div class="img" style="background:linear-gradient(160deg,#fff,#ffe9e3)">${boxMini(c)}<span class="tag">-${off}%</span></div>
+        <div class="body"><h3>${esc(n)}</h3><div class="p">¥???</div><div class="sold">${sold}万個 売れました（たぶん）</div></div></a>`;
+    }).join(""));
+  };
+  const io = new IntersectionObserver(es => { if (es[0].isIntersecting) loadMore(); }, {rootMargin:"400px"});
+  io.observe($("more"));
+  renderCart();
+}
+</script>
+<style>@keyframes bob{50%{transform:translateY(-8px) rotate(-.6deg)}}</style>
+</body>
+</html>
